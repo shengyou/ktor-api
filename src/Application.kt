@@ -12,10 +12,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.jackson.jackson
 import io.ktor.request.receive
 import io.ktor.response.respond
-import io.ktor.routing.get
-import io.ktor.routing.patch
-import io.ktor.routing.post
-import io.ktor.routing.routing
+import io.ktor.routing.*
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.joda.time.DateTime
@@ -93,6 +90,18 @@ fun Application.module(testing: Boolean = false) {
                 if (id != null) {
                     val task = Task.findById(id)
                     task?.completed = true
+                }
+            }
+
+            call.respond(HttpStatusCode.NoContent)
+        }
+
+        delete("/api/v1/tasks/{id}/delete") {
+            val id = call.parameters["id"]?.toInt()
+            transaction {
+                if (id != null) {
+                    val task = Task.findById(id)
+                    task?.delete()
                 }
             }
 
