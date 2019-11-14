@@ -33,4 +33,5 @@ dependencies {
     compile "ch.qos.logback:logback-classic:$logback_version"
     testCompile "io.ktor:ktor-server-tests:$ktor_version"
     implementation "io.ktor:ktor-jackson:$ktor_version"
+    implementation "com.github.javafaker:javafaker:$javafaker_version"
 }
