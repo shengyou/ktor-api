@@ -34,4 +34,5 @@ dependencies {
     testCompile "io.ktor:ktor-server-tests:$ktor_version"
     implementation "io.ktor:ktor-jackson:$ktor_version"
     implementation "com.github.javafaker:javafaker:$javafaker_version"
+    implementation "joda-time:joda-time:$joda_version"
 }
