@@ -24,14 +24,19 @@ fun Application.module(testing: Boolean = false) {
 
     routing {
         get("/") {
-            val task = TaskRespond(
-                "Task 1",
-                false,
-                "2019-11-16 00:00:00",
-                "2019-11-16 00:00:00"
-            )
+            val tasks = mutableListOf<TaskRespond>()
+            for (i in 1..10) {
+                tasks.add(
+                    TaskRespond(
+                        title = "Task $i",
+                        completed = listOf(true, false).shuffled().first(),
+                        createdAt = "2019-11-16 00:00:00",
+                        updatedAt = "2019-11-16 00:00:00"
+                    )
+                )
+            }
 
-            call.respond(task)
+            call.respond(mapOf("tasks" to tasks))
         }
     }
 
