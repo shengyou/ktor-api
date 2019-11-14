@@ -1,5 +1,6 @@
 package io.kraftsman.ktor.api
 
+import com.github.javafaker.Faker
 import io.kraftsman.ktor.api.responds.TaskRespond
 import io.ktor.application.Application
 import io.ktor.application.call
@@ -9,6 +10,8 @@ import io.ktor.jackson.jackson
 import io.ktor.response.respond
 import io.ktor.routing.get
 import io.ktor.routing.routing
+import org.joda.time.DateTime
+import kotlin.random.Random
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
@@ -25,13 +28,14 @@ fun Application.module(testing: Boolean = false) {
     routing {
         get("/") {
             val tasks = mutableListOf<TaskRespond>()
+            val faker = Faker()
             for (i in 1..10) {
                 tasks.add(
                     TaskRespond(
-                        title = "Task $i",
+                        title = "Buy ${faker.beer().name()}",
                         completed = listOf(true, false).shuffled().first(),
-                        createdAt = "2019-11-16 00:00:00",
-                        updatedAt = "2019-11-16 00:00:00"
+                        createdAt = DateTime.now().plusDays(i).toString("yyyy-MM-dd HH:mm:ss"),
+                        updatedAt = DateTime.now().plusHours(Random.nextInt(1, 10)).toString("yyyy-MM-dd HH:mm:ss")
                     )
                 )
             }
