@@ -16,7 +16,8 @@ fun Application.module(testing: Boolean = false) {
 
     routing {
         get("/") {
-            call.respondText("Hello, world", ContentType.Text.Plain, HttpStatusCode.OK)
+            //language=JSON
+            call.respondText("{\n  \"tasks\": [\n    {\n      \"title\": \"Task 1\",\n      \"completed\": false\n    },\n    {\n      \"title\": \"Task 2\",\n      \"completed\": true\n    }\n  ]\n}", ContentType.Application.Json, HttpStatusCode.OK)
         }
     }
 
