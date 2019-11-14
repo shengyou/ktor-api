@@ -1,6 +1,9 @@
 package io.kraftsman.ktor.api
 
+import io.kraftsman.ktor.api.tables.Tasks
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.transactions.transaction
 
 fun main() {
     Database.connect(
@@ -9,4 +12,9 @@ fun main() {
         user = "root",
         password = "root"
     )
+
+    transaction {
+        SchemaUtils.drop(Tasks)
+        SchemaUtils.create(Tasks)
+    }
 }
