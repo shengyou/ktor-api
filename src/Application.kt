@@ -1,6 +1,7 @@
 package io.kraftsman.ktor.api
 
 import com.github.javafaker.Faker
+import io.kraftsman.ktor.api.entities.Task
 import io.kraftsman.ktor.api.responds.TaskRespond
 import io.ktor.application.Application
 import io.ktor.application.call
@@ -10,6 +11,8 @@ import io.ktor.jackson.jackson
 import io.ktor.response.respond
 import io.ktor.routing.get
 import io.ktor.routing.routing
+import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.joda.time.DateTime
 import kotlin.random.Random
 
@@ -24,6 +27,13 @@ fun Application.module(testing: Boolean = false) {
 
         }
     }
+
+    Database.connect(
+        url = "jdbc:mysql://127.0.0.1:8889/ktor_api?useUnicode=true&characterEncoding=utf-8&useSSL=false",
+        driver = "com.mysql.jdbc.Driver",
+        user = "root",
+        password = "root"
+    )
 
     routing {
         get("/") {
@@ -42,6 +52,20 @@ fun Application.module(testing: Boolean = false) {
 
             call.respond(mapOf("tasks" to tasks))
         }
-    }
 
+        get("/api/v1/tasks") {
+            val tasks = transaction {
+                Task.all().sortedByDescending { it.id }.map {
+                    TaskRespond(
+                        title = it.title,
+                        completed = it.completed,
+                        createdAt = it.createdAt.toString("yyyy-MM-dd HH:mm:ss"),
+                        updatedAt = it.updatedAt.toString("yyyy-MM-dd HH:mm:ss")
+                    )
+                }
+            }
+
+            call.respond(mapOf("tasks" to tasks))
+        }
+    }
 }
